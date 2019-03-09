@@ -8,15 +8,19 @@ export class ChatService {
 
   public data: string[] = ["Welcome to simple chat!"];
 
-  private hubConnection : signalR.HubConnection
+  private hubConnection: signalR.HubConnection
 
   public startConnection = async () => {
-     this.hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl("/message")
-    .build();
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl("/message")
+      .build();
 
-    await this.hubConnection.start().then(() => console.log('connection started!')).catch(err => (console.log(err)));
-    
+    await this.hubConnection.start().then(() => console.log('connection started!')).catch(err => {
+
+      console.log(err);
+      throw err
+    });
+
   }
 
   public addReceiveMessageListener = async () => {
