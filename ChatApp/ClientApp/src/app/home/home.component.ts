@@ -9,36 +9,56 @@ import { Message } from '../model/message';
 })
 export class HomeComponent {
 
-  private messages: string[];
+  public messages: string[];
 
-  private users: string[] = [];
-  
-  private nick : string;
+  public users: string[] = [];
 
-  private message: string;
+  public nick: string;
 
-  public constructor (public chatService : ChatService) { }
+  public message: string;
+
+  public isReady: boolean = false;
+
+  public constructor(public chatService: ChatService) { }
 
   async ngOnInit() {
 
     this.nick = window.prompt('Your name:', 'Hadi');
 
     await this.chatService.startConnection();
-    await this.chatService.addReceiveMessageListener();   
+    await this.chatService.addReceiveMessageListener();
 
     this.messages = this.chatService.data;
+
+    this.isReady = true;
   }
 
   async Send() {
 
-    const messageObject  = new Message();
-    messageObject.content = this.message;
-    messageObject.username = this.nick;
-    
-    await this.chatService.sendMessage(messageObject);
+    if (this.isReady) {
 
-    this.message = null;
+      this.isReady = false;
+      const messageObject = new Message();
+      messageObject.content = this.message;
+      messageObject.username = this.nick;
 
+      await this.chatService.sendMessage(messageObject);
+
+      this.message = null;
+
+      this.isReady = true;
+    }
+
+  }
+
+  isValid(): boolean {
+
+
+    if (this.message && this.message.trim()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
