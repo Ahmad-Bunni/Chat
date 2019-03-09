@@ -11,10 +11,4 @@ variables:
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-
-- task: AzureRmWebAppDeployment@3
-  inputs:
-    azureSubscription: 'bf5578cd-db06-4368-a38b-98cae085a6bc'
-    WebAppName: 'Simple-Chat-Service'
-    Package: $(System.ArtifactsDirectory)/**/*.zip
+  displayName: 'build $(buildConfiguration)'
