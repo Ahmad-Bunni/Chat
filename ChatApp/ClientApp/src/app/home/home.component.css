@@ -7,21 +7,30 @@
 .chat {
   background-color: #f6f6f6;
   padding: 8px;
-  width: 100%;
+  width: 90%;
+  margin-left:auto;
+  margin-right:auto;
+  height: 100%;
   height: 43%;
   overflow-y: scroll;
-  float: left;
-  margin: 16px;
+
   border-radius: 10px;
-  padding-right: 17px;
+
 }
 
 .chat-text {
-  margin: 16px;
+  width: 90%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 8px;
+
 }
 
 .btn-chat {
-  margin: 16px;
+  width: 90%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 8px;
 }
 
 .users {

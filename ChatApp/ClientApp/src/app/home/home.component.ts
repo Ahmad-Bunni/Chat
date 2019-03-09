@@ -25,12 +25,18 @@ export class HomeComponent {
 
     this.nick = window.prompt('Your name:', 'Hadi');
 
-    await this.chatService.startConnection();
-    await this.chatService.addReceiveMessageListener();
+    try {
 
-    this.messages = this.chatService.data;
 
-    this.isReady = true;
+      await this.chatService.startConnection();
+      await this.chatService.addReceiveMessageListener();
+
+      this.messages = this.chatService.data;
+
+      this.isReady = true;
+    } catch (error) {
+      this.isReady = false;
+    }
   }
 
   async Send() {
@@ -53,7 +59,7 @@ export class HomeComponent {
   isValid(): boolean {
 
 
-    if (this.message && this.message.trim()) {
+    if (this.isReady && this.message && this.message.trim()) {
       return true;
     } else {
       return false;

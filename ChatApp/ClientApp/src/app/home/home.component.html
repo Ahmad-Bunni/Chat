@@ -6,7 +6,7 @@
   </div>
   <input type="text" class="form-control chat-text" [(ngModel)]="message" (keyup.enter)="Send()" spellcheck="true"
    placeholder="Type message..." />
-  <button (click)="Send()" class="btn btn-chat btn-block btn-primary" [disabled]="!isValid()">Send</button>
+  <button (click)="Send()" class="btn btn-chat btn-block btn-primary" [disabled]="!isReady || !isValid()">Send</button>
 </div>
 
 
