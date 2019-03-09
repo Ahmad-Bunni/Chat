@@ -21,10 +21,11 @@
   padding: 8px;
   width: 100%;
   height: 43%;
-  overflow: auto;
+  overflow-y: scroll;
   float: left;
   margin: 16px;
   border-radius: 10px;
+  padding-right: 17px;
 }
 
 .chat-text {
