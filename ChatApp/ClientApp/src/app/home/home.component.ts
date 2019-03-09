@@ -45,7 +45,6 @@ export class HomeComponent {
       await this.chatService.sendMessage(messageObject);
 
       this.message = null;
-
       this.isReady = true;
     }
 
