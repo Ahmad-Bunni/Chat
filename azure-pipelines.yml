@@ -12,3 +12,9 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+
+- task: AzureRmWebAppDeployment@3
+  inputs:
+    azureSubscription: '<Azure service connection>'
+    WebAppName: '<Name of web app>'
+    Package: $(System.ArtifactsDirectory)/**/*.zip
