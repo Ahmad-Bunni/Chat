@@ -29,7 +29,7 @@ namespace ChatApp.Hubs
                 Username = "Server"
             };
 
-            await Clients.All.SendAsync("receiveUsers", users);
+            await Clients.All.SendAsync("receiveUsers", users.ToArray());
 
             await Clients.All.SendAsync("receiveMessage", serverMessage);
 
@@ -49,7 +49,7 @@ namespace ChatApp.Hubs
                 Username = "Server"
             };
 
-            await Clients.All.SendAsync("receiveUsers", users);
+            await Clients.All.SendAsync("receiveUsers", users.ToArray());
 
             await Clients.All.SendAsync("receiveMessage", serverMessage);
 

@@ -5,9 +5,7 @@
     <div class="col-md-8">
 
       <div class="chat-box">
-        <div *ngFor="let message of messages">
-          <p>{{message}}</p>
-        </div>
+        <p *ngFor="let message of messages">{{message.content}}</p>
       </div>
 
       <div class="form-group">
@@ -23,20 +21,18 @@
 
     <div class="col-md-2">
       <h6>Connected Users</h6>
-      <select *ngFor="let user of users" class="box col-md-12" multiple>
+      <select class="box col-md-12" multiple>
 
-        <option value="{{user}}">{{users}}</option>
+        <option *ngFor="let user of users" value="{{user.username}}">{{user.username}}</option>
 
       </select>
 
     </div>
     <div class="col-md-2">
       <h6>Public Groups</h6>
-      <select *ngFor="let group of groups" class="box col-md-12" multiple>
+      <select class="box col-md-12" multiple>
 
-        <option *ngIf="groups == 0" disabled>No groups available</option>
-
-        <option value="{{group}}">{{group}}</option>
+        <option *ngFor="let group of groups" value="{{group}}">{{group}}</option>
 
       </select>
 
