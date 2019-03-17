@@ -1,12 +1,41 @@
-<div class="chat-container">
-  <div class="chat" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-    <div  *ngFor="let message of messages">
-      <p>{{message}}</p>
+<div class="container-fluid">
+  <h1>Channel 1</h1>
+  <div class="row col-md-12">
+
+    <div class="col-md-8">
+
+      <div class="chat-box">
+        <p *ngFor="let message of messages">{{message.content}}</p>
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="chat-text" [(ngModel)]="message" (keyup.enter)="Send()" spellcheck="true"
+          placeholder="Type message..." class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <button (click)="Send()" class="btn btn-chat btn-block btn-primary"
+          [disabled]="!isReady || !isValid()">Send</button>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <h6>Connected Users</h6>
+      <select class="box col-md-12" multiple>
+
+        <option *ngFor="let user of users" value="{{user.username}}">{{user.username}}</option>
+
+      </select>
+
+    </div>
+    <div class="col-md-2">
+      <h6>Public Groups</h6>
+      <select class="box col-md-12" multiple>
+
+        <option *ngFor="let group of groups" value="{{group}}">{{group}}</option>
+
+      </select>
+
     </div>
   </div>
-  <input type="text" class="form-control chat-text" [(ngModel)]="message" (keyup.enter)="Send()" spellcheck="true"
-   placeholder="Type message..." />
-  <button (click)="Send()" class="btn btn-chat btn-block btn-primary" [disabled]="!isReady || !isValid()">Send</button>
 </div>
-
-

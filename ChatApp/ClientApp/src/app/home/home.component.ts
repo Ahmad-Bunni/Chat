@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatService } from '../service/chat.service';
-import { Message } from '../model/message';
+import { ChatService } from '../home/service/chat.service';
+import { Message } from '../home/model/message';
+import { User } from './model/User';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +10,11 @@ import { Message } from '../model/message';
 })
 export class HomeComponent {
 
-  public messages: string[];
+  public messages: Message[];
 
-  public users: string[] = [];
+  public users: User[] = [];
+
+  public groups: string[] = [''];
 
   public nick: string;
 
@@ -23,15 +26,15 @@ export class HomeComponent {
 
   async ngOnInit() {
 
-    this.nick = window.prompt('Your name:', 'Hadi');
-
     try {
-
 
       await this.chatService.startConnection();
       await this.chatService.addReceiveMessageListener();
+      await this.chatService.addReceiveUsersListener();
 
-      this.messages = this.chatService.data;
+      this.chatService.observableMessages.subscribe(msgs => this.messages = msgs);
+
+      this.chatService.observableUsers.subscribe(users => this.users = users);
 
       this.isReady = true;
     } catch (error) {
