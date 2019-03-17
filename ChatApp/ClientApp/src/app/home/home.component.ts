@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatService } from '../service/chat.service';
-import { Message } from '../model/message';
+import { ChatService } from '../home/service/chat.service';
+import { Message } from '../home/model/message';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,9 @@ export class HomeComponent {
 
   public messages: string[];
 
-  public users: string[] = [];
+  public users: string[] = [''];
+
+  public groups: string[] = [''];
 
   public nick: string;
 
@@ -22,8 +24,6 @@ export class HomeComponent {
   public constructor(public chatService: ChatService) { }
 
   async ngOnInit() {
-
-    this.nick = window.prompt('Your name:', 'Hadi');
 
     try {
 
