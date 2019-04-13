@@ -1,57 +1,85 @@
-﻿using ChatApp.Models;
+﻿using ChatApp.Domain.Interface;
+using ChatApp.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChatApp.Hubs
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MessageHub : Hub
     {
-        public static List<User> users = new List<User>();
+        private readonly IUserService _userService;
+
+        public MessageHub(IUserService userService)
+        {
+            _userService = userService;
+        }
 
         public async Task SendMessage(Message message)
         {
+            message.Content = string.Format("{0} {1}: {2}", DateTime.UtcNow, Context.User.Identity.Name, message.Content);
             message.IsServer = false;
 
-            await Clients.All.SendAsync("receiveMessage", message);
+            await Clients.Group(message.GroupName).SendAsync("Send", message);
+        }
+
+        public async Task JoinGroup(string groupName)
+        {
+            try
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+                await _userService.JoinGroup(groupName, Context.User.Identity.Name, Context.ConnectionId);
+
+                var users = await _userService.GetAllGroupUsers(groupName);
+
+                await Clients.Group(groupName).SendAsync("Users", users.Select(x => x.Username));
+
+                await Clients.Group(groupName).SendAsync("Send"
+                    , new Message
+                    {
+                        Content = $"{Context.User.Identity.Name} has joined the chat!",
+                        IsServer = true,
+                        Username = "Server"
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async override Task OnConnectedAsync()
         {
-            users.Add(new User { Username = "user" });
-
-            Message serverMessage = new Message()
-            {
-                IsServer = true,
-                Content = "",
-                Username = "Server"
-            };
-
-            await Clients.All.SendAsync("receiveUsers", users.ToArray());
-
-            await Clients.All.SendAsync("receiveMessage", serverMessage);
-
             await base.OnConnectedAsync();
         }
 
         public async override Task OnDisconnectedAsync(Exception exception)
         {
-            User user = users.FirstOrDefault(x => x.Username == "user");
+            var user = await _userService.FindUser(Context.User.Identity.Name);
 
-            users.Remove(user);
-
-            Message serverMessage = new Message()
+            if (user != null)
             {
-                IsServer = true,
-                Content = "",
-                Username = "Server"
-            };
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, user.GroupName);
 
-            await Clients.All.SendAsync("receiveUsers", users.ToArray());
+                await _userService.LeaveGroup(user.Id, user.Username);
 
-            await Clients.All.SendAsync("receiveMessage", serverMessage);
+                var users = await _userService.GetAllGroupUsers(user.GroupName);
+
+                await Clients.Group(user.GroupName).SendAsync("Users", users.Select(x => x.Username));
+
+                await Clients.Group(user.GroupName).SendAsync("Send", new Message
+                {
+                    Content = $"{Context.User.Identity.Name} has left the chat!",
+                    IsServer = true,
+                    Username = "Server"
+                });
+            }
+
 
             await base.OnDisconnectedAsync(exception);
         }

@@ -15,6 +15,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.2.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\guard\" />
     <Folder Include="ClientApp\src\app\service\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChatApp.Data\ChatApp.Data.csproj" />
+    <ProjectReference Include="..\ChatApp.Domain\ChatApp.Domain.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

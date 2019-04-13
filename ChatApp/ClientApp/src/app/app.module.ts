@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './guard/auth.guard';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './service/auth.service';
 
 
 
@@ -14,17 +17,19 @@ import { HomeComponent } from './home/home.component';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' }
+      { path: 'chat', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
+      { path: '**', component: LoginComponent, pathMatch: 'full' },
 
     ])
   ],
-  providers: [],
+  providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
