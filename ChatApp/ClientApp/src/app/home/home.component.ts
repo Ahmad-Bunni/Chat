@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ChatService } from '../home/service/chat.service';
-import { Message } from '../home/model/message';
-import { User } from './model/User';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChatService } from '../service/chat.service';
+import { Message } from '../model/message.model';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
 
   public messages: Message[];
 
-  public users: User[] = [];
+  public users: string[] = [];
 
   public groups: string[] = [''];
 
@@ -24,6 +23,11 @@ export class HomeComponent {
 
   public constructor(public chatService: ChatService) { }
 
+  async ngOnDestroy() {
+    await this.chatService.disconnect();
+   }
+
+   
   async ngOnInit() {
 
     try {
@@ -31,10 +35,10 @@ export class HomeComponent {
       await this.chatService.startConnection();
       await this.chatService.addReceiveMessageListener();
       await this.chatService.addReceiveUsersListener();
-
       this.chatService.observableMessages.subscribe(msgs => this.messages = msgs);
-
       this.chatService.observableUsers.subscribe(users => this.users = users);
+
+      await this.chatService.joinGroup('Chaters');
 
       this.isReady = true;
     } catch (error) {
@@ -50,6 +54,7 @@ export class HomeComponent {
       const messageObject = new Message();
       messageObject.content = this.message;
       messageObject.username = this.nick;
+      messageObject.groupName = 'Chaters';
 
       await this.chatService.sendMessage(messageObject);
 
@@ -68,6 +73,7 @@ export class HomeComponent {
       return false;
     }
   }
+
 
 }
 
