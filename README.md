@@ -1,3 +1,3 @@
 # Chat
 
-Simple chat application using .NET Core, Angular CLI, and SignalR
+Simple chat application using  Angular CLI, .NET Core, Cosmos DB, and SignalR
