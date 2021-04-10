@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import * as signalR from "@aspnet/signalr";
 import { Message } from '../model/message.model';
-import {Subject } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Injectable } from "@angular/core";
+import { Subject } from 'rxjs';
+import { HubConnection } from '@microsoft/signalr';
+const signalR = require("@microsoft/signalr");
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class ChatService {
 
   public observableGroups = new Subject<string[]>();
 
-  private hubConnection: signalR.HubConnection
+  private hubConnection: HubConnection
 
   public startConnection = async () => {
     this.hubConnection = new signalR.HubConnectionBuilder()

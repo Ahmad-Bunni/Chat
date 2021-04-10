@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '../model/auth.model';
 import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
 export const TOKEN_NAME: string = 'access_token';
 export const API_URI: string = '/api/user/authenticate';
 
