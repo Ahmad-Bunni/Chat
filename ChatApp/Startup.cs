@@ -105,15 +105,20 @@ namespace ChatApp
             }
 
             app.UseRouting();
+
             app.UseAuthorization();
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
+
             app.UseSpaStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<MessageHub>($"/{nameof(MessageHub)}", options =>
                 {
-                    options.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
+                    options.Transports = HttpTransportType.WebSockets;
                 });
             });
 
