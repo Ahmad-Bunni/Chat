@@ -105,6 +105,7 @@ namespace ChatApp
             }
 
             app.UseRouting();
+            app.UseAuthorization();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
