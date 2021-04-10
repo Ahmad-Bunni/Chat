@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "b1bbbfc6-1322-4e7e-89cc-daf946a0a667"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -13,8 +16,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "progress": true,
-            "extractCss": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
