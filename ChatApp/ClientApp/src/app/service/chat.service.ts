@@ -3,7 +3,6 @@ import { AuthService } from './auth.service'
 import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
-import { MessagePackHubProtocol } from '@microsoft/signalr-protocol-msgpack'
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +25,6 @@ export class ChatService {
       .withUrl('/MessageHub', {
         accessTokenFactory: () => this.authService.getToken(),
       })
-      .withHubProtocol(new MessagePackHubProtocol())
       .build()
 
     await this.hubConnection
