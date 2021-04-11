@@ -112,8 +112,6 @@ namespace ChatApp
 
             app.UseStaticFiles();
 
-            app.UseSpaStaticFiles();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<MessageHub>($"/{nameof(MessageHub)}", options =>
@@ -132,6 +130,8 @@ namespace ChatApp
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSpaStaticFiles();
 
             app.UseSpa(spa =>
             {
