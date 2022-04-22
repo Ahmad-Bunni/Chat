@@ -1,7 +1,6 @@
-﻿namespace ChatApp.Domain.Enum
+﻿namespace ChatApp.Domain.Enum;
+
+public enum Documents
 {
-    public enum Documents
-    {
-        ChatDB
-    }
+    ChatDB
 }

@@ -1,124 +1,106 @@
-﻿using System;
+﻿using ChatApp.Domain.Interface;
+using ChatApp.Domain.Model.Authentication;
+using ChatApp.Model.Users;
+using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
-using ChatApp.Domain.Interface;
-using ChatApp.Domain.Model;
-using ChatApp.Model;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
-namespace ChatApp.Domain.Serivce
+namespace ChatApp.Domain.Serivce;
+
+public class UserService : IUserService
 {
-    public class UserService : IUserService
+    private readonly ICosmosRepository<User> _cosmosRepository;
+    private readonly AuthSettings _authSettings;
+
+    public UserService(ICosmosRepository<User> cosmosRepository, AuthSettings authSettings)
     {
-        private readonly ICosmosRepository<User> _cosmosRepository;
-        private readonly AppSettings _appSettings;
+        _cosmosRepository = cosmosRepository;
+        _authSettings = authSettings;
+    }
 
-        public UserService(ICosmosRepository<User> cosmosRepository, IOptions<AppSettings> appSettings)
+    public async Task<Authentication> Authenticate(string username)
+    {
+        var user = await FindUser(username);
+
+        // return null if user with the same username exists
+        if (user != null)
+            return null;
+
+        await JoinGroup(null, username, null);
+
+        //TODO authentication
+
+        return default;
+    }
+
+    public async Task<User> FindUser(string username)
+    {
+        try
         {
-            _cosmosRepository = cosmosRepository;
-            _appSettings = appSettings.Value;
+            var users = await _cosmosRepository.GetItemsAsync(x => x.Username.ToLower() == username.ToLower());
+
+            return (users is not null && users.Any()) ? users.First() : null;
         }
-
-        public async Task<Authentication> Authenticate(string username)
+        catch (Exception ex)
         {
-            var user = await FindUser(username);
+            throw;
+        }
+    }
 
-            // return null if user with the same username exists
-            if (user != null)
-                return null;
+    public async Task<IEnumerable<User>> GetAllGroupUsers(string groupName)
+    {
+        try
+        {
+            return await _cosmosRepository.GetItemsAsync(x => x.GroupName == groupName);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
-            await JoinGroup(null, username, null);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+    public async Task JoinGroup(string groupName, string userId, string connectionId)
+    {
+        try
+        {
+            var user = new User
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, username)
-                }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Id = Guid.NewGuid().ToString(), // premitive type
+                GroupName = groupName,
+                ConnectionId = connectionId
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            var users = await _cosmosRepository.GetItemsAsync(x => x.Id == userId);
 
-
-            return new Authentication
+            if (users is not null && users.Any())
             {
-                ExpirationDate = tokenDescriptor.Expires,
-                Token = tokenHandler.WriteToken(token)
-            };
-        }
-
-        public async Task<User> FindUser(string username)
-        {
-            try
-            {
-                var user = await _cosmosRepository.FindItemAsync(x => x.Username.ToLower() == username.ToLower());
-                if (user != null)
+                user = users.First() with
                 {
-                    return user;
-                }
+                    GroupName = groupName,
+                    ConnectionId = connectionId,
+                };
+            }
 
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            await _cosmosRepository.UpsertItemAsync(user);
+
         }
-
-        public async Task<IEnumerable<User>> GetAllGroupUsers(string groupName)
+        catch (Exception ex)
         {
-            try
-            {
-                return await _cosmosRepository.GetItemsAsync(x => x.GroupName == groupName);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            throw;
         }
+    }
 
-        public async Task JoinGroup(string groupName, string username, string connectionId)
+    public async Task LeaveGroup(string userId)
+    {
+        try
         {
-            try
-            {
-                var user = await _cosmosRepository.FindItemAsync(x => x.Username == username);
-                if (user != null)
-                {
-                    user.GroupName = groupName;
-                    user.ConnectionId = connectionId;
+            await _cosmosRepository.DeleteItemAsync(userId);
 
-                    await _cosmosRepository.UpdateItemAsync(user);
-                }
-                else
-                {
-                    await _cosmosRepository.InsertItemAsync(new User { Username = username, GroupName = groupName, ConnectionId = connectionId });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
-
-        public async Task LeaveGroup(string userId, string username)
+        catch (Exception ex)
         {
-            try
-            {
-                await _cosmosRepository.RemoveItemAsync(userId, username);
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            throw;
         }
     }
 }

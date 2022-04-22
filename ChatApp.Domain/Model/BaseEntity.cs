@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace ChatApp.Domain.Model
 {
-    public abstract class BaseEntity
+    public abstract record BaseEntity
     {
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")]
+        public string Id { get; init; }
 
-        public DateTimeOffset CreatedDateTime { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedDateTime { get; init; } = DateTime.UtcNow;
     }
 }

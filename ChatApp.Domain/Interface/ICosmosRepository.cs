@@ -1,19 +1,16 @@
-﻿using Microsoft.Azure.Documents;
+﻿using ChatApp.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ChatApp.Domain.Interface
-{
-    public interface ICosmosRepository<T> where T : class
-    {
-        Task<T> GetByIdAsync(string id);
-        Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate);
-        Task<Document> InsertItemAsync(T item);
-        Task<bool> RemoveItemAsync(string id, string username);
-        Task<Document> UpdateItemAsync(T item);
-        Task<T> FindItemAsync(Expression<Func<T, bool>> predicate);
+namespace ChatApp.Domain.Interface;
 
-    }
+public interface ICosmosRepository<TEntity> : IDisposable where TEntity : BaseEntity
+{
+    Task<TEntity> GetItemByIdAsync(string id);
+    Task<IEnumerable<TEntity>> GetItemsAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<TEntity> AddItemAsync(TEntity item);
+    Task<bool> DeleteItemAsync(string id);
+    Task<TEntity> UpsertItemAsync(TEntity item);
 }

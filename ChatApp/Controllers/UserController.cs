@@ -1,40 +1,38 @@
-﻿using System.Threading.Tasks;
-using ChatApp.Domain.Interface;
-using ChatApp.Domain.Model;
+﻿using ChatApp.Domain.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace ChatApp.Controllers
+namespace ChatApp.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public UserController(IUserService userService)
+    [Route("authenticate/username/{username}")]
+    [HttpGet]
+    public async Task<IActionResult> Authenticate(string username)
+    {
+        var auth = await _userService.Authenticate(username); // optional utilise mediator + CQRS + DDD 
+
+        if (auth != null)
         {
-            _userService = userService;
+            return new JsonResult(auth)
+            {
+                ContentType = "application/json",
+                StatusCode = StatusCodes.Status200OK
+            };
         }
-
-        [Route("authenticate/{username}")]
-        [HttpGet]
-        public async Task<IActionResult> Authenticate(string username)
+        else
         {
-            Authentication auth = await _userService.Authenticate(username);
-
-            if (auth != null)
-            {
-                return new JsonResult(auth)
-                {
-                    ContentType = "application/json",
-                    StatusCode = StatusCodes.Status200OK
-                };
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return BadRequest();
         }
     }
 }
