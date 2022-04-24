@@ -1,5 +1,5 @@
 ﻿using ChatApp.Domain.Interfaces;
-using ChatApp.Domain.Models.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,30 +16,23 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [Route("authenticate/{username}")]
+    [Route("authenticate/username/{username}")]
     [HttpGet]
     public async Task<IActionResult> Authenticate(string username)
     {
-        if (false)
-        {
-            var auth = await _userService.Authenticate(username); // optional utilise mediator + CQRS + DDD 
+        var auth = await _userService.Authenticate(username); // optional utilise mediator + CQRS + DDD 
 
-            if (auth != null)
+        if (auth != null)
+        {
+            return new JsonResult(auth)
             {
-                return Ok(auth);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                ContentType = "application/json",
+                StatusCode = StatusCodes.Status200OK
+            };
         }
         else
         {
-            return Ok(new Authentication
-            {
-                ExpirationDate = System.DateTime.Now.AddDays(1),
-                Token = "Token"
-            });
+            return BadRequest();
         }
     }
 }
