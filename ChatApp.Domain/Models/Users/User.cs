@@ -1,6 +1,6 @@
-﻿using ChatApp.Domain.Model;
+﻿using ChatApp.Domain.Models;
 
-namespace ChatApp.Model.Users;
+namespace ChatApp.Domain.Models.Users;
 
 public record User : BaseEntity
 {

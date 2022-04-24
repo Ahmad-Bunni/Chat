@@ -1,6 +1,6 @@
-﻿using ChatApp.Domain.Model;
+﻿using ChatApp.Domain.Models;
 
-namespace ChatApp.Model.Messaging;
+namespace ChatApp.Domain.Models.Messaging;
 
 public record Message : BaseEntity
 {

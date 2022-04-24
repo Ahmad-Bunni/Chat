@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28705.295
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApp", "ChatApp\ChatApp.csproj", "{80E0E3E0-D0AB-496F-B5DF-25AE6D9F8438}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Domain", "ChatApp.Domain\ChatApp.Domain.csproj", "{DF86D443-70CD-4E9F-9861-86D518F12E3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApp.Domain", "ChatApp.Domain\ChatApp.Domain.csproj", "{DF86D443-70CD-4E9F-9861-86D518F12E3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{C6D0CC9A-208F-476D-B579-904D5220479F}"
 EndProject
@@ -13,7 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{494429
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{61A1EF3F-DD8B-4B44-80A2-D87833D61D31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Data", "ChatApp.Data\ChatApp.Data.csproj", "{8816E8F6-20F3-4C5B-B72B-2C8737626677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApp.Data", "ChatApp.Data\ChatApp.Data.csproj", "{8816E8F6-20F3-4C5B-B72B-2C8737626677}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{2489084C-2FCB-40FE-9DE1-F6A98323BD1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Shared", "ChatApp.Shared\ChatApp.Shared.csproj", "{F69667F7-15D3-4175-BE16-6791C5AEC6F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,10 @@ Global
 		{8816E8F6-20F3-4C5B-B72B-2C8737626677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8816E8F6-20F3-4C5B-B72B-2C8737626677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8816E8F6-20F3-4C5B-B72B-2C8737626677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F69667F7-15D3-4175-BE16-6791C5AEC6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F69667F7-15D3-4175-BE16-6791C5AEC6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F69667F7-15D3-4175-BE16-6791C5AEC6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F69667F7-15D3-4175-BE16-6791C5AEC6F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +49,7 @@ Global
 		{80E0E3E0-D0AB-496F-B5DF-25AE6D9F8438} = {C6D0CC9A-208F-476D-B579-904D5220479F}
 		{DF86D443-70CD-4E9F-9861-86D518F12E3A} = {49442932-B135-45AC-B562-C111881FA049}
 		{8816E8F6-20F3-4C5B-B72B-2C8737626677} = {61A1EF3F-DD8B-4B44-80A2-D87833D61D31}
+		{F69667F7-15D3-4175-BE16-6791C5AEC6F0} = {2489084C-2FCB-40FE-9DE1-F6A98323BD1C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88E7863B-AF26-42EB-8CD2-0421E8E589A5}

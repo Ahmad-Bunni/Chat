@@ -1,5 +1,5 @@
-﻿using ChatApp.Domain.Interface;
-using ChatApp.Model.Messaging;
+﻿using ChatApp.Domain.Interfaces;
+using ChatApp.Domain.Models.Messaging;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Linq;
@@ -47,16 +47,14 @@ public class MessageHub : Hub
                     Username = "Server"
                 });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
+            // TODO log
             throw;
         }
     }
 
-    public async override Task OnConnectedAsync()
-    {
-        await base.OnConnectedAsync();
-    }
+    public async override Task OnConnectedAsync() => await base.OnConnectedAsync();
 
     public async override Task OnDisconnectedAsync(Exception exception)
     {

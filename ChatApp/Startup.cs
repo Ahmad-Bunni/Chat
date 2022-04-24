@@ -1,11 +1,11 @@
-
-using ChatApp.Data.Repository;
-using ChatApp.Domain.Interface;
-using ChatApp.Domain.Serivce;
+using Azure.Identity;
+using ChatApp.Domain.Models.Authentication;
 using ChatApp.Hubs;
+using ChatApp.Shared.DI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +14,7 @@ namespace ChatApp;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; }
 
     public Startup(IConfiguration configuration)
     {
@@ -27,11 +27,14 @@ public class Startup
 
         services.AddControllers();
 
-        services.AddSingleton(typeof(ICosmosRepository<>), typeof(CosmosRepository<>));
+        services.RegisterDependencies();
 
-        services.AddScoped(typeof(IUserService), typeof(UserService));
+        services.AddSingleton(new CosmosClient(Configuration.GetValue<string>("CosmosDB:EndpointUri"), new DefaultAzureCredential()));
 
-        var authSettingsSection = Configuration.GetSection("AuthSettings");
+        services.AddSingleton(new AuthSettings
+        {
+            Secret = Configuration.GetValue<string>("AuthSettings:Secret")
+        });
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -60,6 +63,10 @@ public class Startup
             {
                 options.Transports = HttpTransportType.WebSockets;
             });
+
+            endpoints.MapControllers();
+
+            endpoints.MapGet("/", () => "Running!");
         });
 
         app.UseAuthentication();
@@ -67,10 +74,5 @@ public class Startup
         app.UseCors(builder => builder.AllowAnyOrigin()
                               .AllowAnyMethod()
                               .AllowAnyHeader());
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
     }
 }

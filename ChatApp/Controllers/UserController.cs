@@ -1,4 +1,4 @@
-﻿using ChatApp.Domain.Interface;
+﻿using ChatApp.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
