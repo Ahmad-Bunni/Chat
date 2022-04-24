@@ -46,6 +46,7 @@ public class Startup
         else
         {
             app.UseExceptionHandler("/Error");
+
             app.UseHsts();
         }
 
@@ -55,7 +56,10 @@ public class Startup
 
         app.UseHttpsRedirection();
 
-        app.UseStaticFiles();
+        app.UseCors(builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 
         app.UseEndpoints(endpoints =>
         {
@@ -70,9 +74,5 @@ public class Startup
         });
 
         app.UseAuthentication();
-
-        app.UseCors(builder => builder.AllowAnyOrigin()
-                              .AllowAnyMethod()
-                              .AllowAnyHeader());
     }
 }
