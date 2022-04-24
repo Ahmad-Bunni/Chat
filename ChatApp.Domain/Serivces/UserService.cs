@@ -1,21 +1,21 @@
-﻿using ChatApp.Domain.Interface;
-using ChatApp.Domain.Model.Authentication;
-using ChatApp.Model.Users;
+﻿using ChatApp.Domain.Interfaces;
+using ChatApp.Domain.Models.Authentication;
+using ChatApp.Domain.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChatApp.Domain.Serivce;
+namespace ChatApp.Domain.Serivces;
 
 public class UserService : IUserService
 {
-    private readonly ICosmosRepository<User> _cosmosRepository;
+    private readonly IUserRepository _userRepository;
     private readonly AuthSettings _authSettings;
 
-    public UserService(ICosmosRepository<User> cosmosRepository, AuthSettings authSettings)
+    public UserService(IUserRepository userRepository, AuthSettings authSettings)
     {
-        _cosmosRepository = cosmosRepository;
+        _userRepository = userRepository;
         _authSettings = authSettings;
     }
 
@@ -38,12 +38,13 @@ public class UserService : IUserService
     {
         try
         {
-            var users = await _cosmosRepository.GetItemsAsync(x => x.Username.ToLower() == username.ToLower());
+            var users = await _userRepository.GetItemsAsync(x => x.Username.ToLower() == username.ToLower());
 
             return (users is not null && users.Any()) ? users.First() : null;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
+            // TOOD logs
             throw;
         }
     }
@@ -52,10 +53,11 @@ public class UserService : IUserService
     {
         try
         {
-            return await _cosmosRepository.GetItemsAsync(x => x.GroupName == groupName);
+            return await _userRepository.GetItemsAsync(x => x.GroupName == groupName);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
+            // TOOD logs
             throw;
         }
     }
@@ -71,7 +73,7 @@ public class UserService : IUserService
                 ConnectionId = connectionId
             };
 
-            var users = await _cosmosRepository.GetItemsAsync(x => x.Id == userId);
+            var users = await _userRepository.GetItemsAsync(x => x.Id == userId);
 
             if (users is not null && users.Any())
             {
@@ -82,11 +84,12 @@ public class UserService : IUserService
                 };
             }
 
-            await _cosmosRepository.UpsertItemAsync(user);
+            await _userRepository.UpsertItemAsync(user);
 
         }
-        catch (Exception ex)
+        catch (Exception)
         {
+            // TOOD logs
             throw;
         }
     }
@@ -95,11 +98,12 @@ public class UserService : IUserService
     {
         try
         {
-            await _cosmosRepository.DeleteItemAsync(userId);
+            await _userRepository.DeleteItemAsync(userId);
 
         }
-        catch (Exception ex)
+        catch (Exception)
         {
+            // TOOD logs
             throw;
         }
     }

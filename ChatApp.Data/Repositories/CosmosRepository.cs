@@ -1,5 +1,5 @@
-﻿using ChatApp.Domain.Interface;
-using ChatApp.Domain.Model;
+﻿using ChatApp.Domain.Interfaces;
+using ChatApp.Domain.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using System;
@@ -9,9 +9,9 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace ChatApp.Data.Repository;
+namespace ChatApp.Data.Repositories;
 
-public abstract class CosmosRepository<TEntity> : ICosmosRepository<TEntity>, IDisposable
+public abstract class CosmosRepository<TEntity> : ICosmosRepository<TEntity>
         where TEntity : BaseEntity
 {
     private readonly CosmosClient _cosmosClient;
@@ -63,10 +63,5 @@ public abstract class CosmosRepository<TEntity> : ICosmosRepository<TEntity>, ID
         var itemResponse = await _container.UpsertItemAsync(item, new PartitionKey(item.Id));
 
         return itemResponse.Resource;
-    }
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
     }
 }

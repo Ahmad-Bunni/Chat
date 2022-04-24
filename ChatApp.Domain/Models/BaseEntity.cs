@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace ChatApp.Domain.Model
+namespace ChatApp.Domain.Models
 {
     public abstract record BaseEntity
     {

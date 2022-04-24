@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChatApp.Domain.Model.Authentication;
+namespace ChatApp.Domain.Models.Authentication;
 
 public record Authentication
 {
