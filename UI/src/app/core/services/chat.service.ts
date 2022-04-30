@@ -1,4 +1,4 @@
-import { Message } from '../model/message.model'
+import { Message } from '../../common/model/message.model'
 import { AuthService } from './auth.service'
 import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs'
