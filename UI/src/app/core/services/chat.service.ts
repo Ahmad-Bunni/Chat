@@ -1,14 +1,14 @@
-import { Message } from '../../common/model/message.model'
-import { AuthService } from './auth.service'
+import { Message } from '@features/chat/models/message.model'
+import { AuthenticationService } from '.'
 import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'any',
 })
 export class ChatService {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthenticationService) {}
 
   private messages: Message[] = []
 

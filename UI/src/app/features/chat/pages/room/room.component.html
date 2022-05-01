@@ -1,0 +1,9 @@
+<section *ngIf="room$ | async as room">
+  <div *ngFor="let user of room?.users">
+    {{ user.username }}
+  </div>
+
+  <button (click)="addUser()">Add User</button>
+
+  <button (click)="removeUser()">Remove User</button>
+</section>

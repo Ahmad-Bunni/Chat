@@ -4,13 +4,15 @@ import { Routes, RouterModule } from '@angular/router'
 const routes: Routes = [
   {
     path: '',
+    // TOOD canload -> login
     loadChildren: () =>
-      import('./modules/home/home.module').then((mod) => mod.HomeModule),
+      import('./features/chat/chat.module').then((mod) => mod.ChatModule),
   },
   {
     path: 'login',
+
     loadChildren: () =>
-      import('./modules/login/login.module').then((mod) => mod.LoginModule),
+      import('./features/login/login.module').then((mod) => mod.LoginModule),
   },
 ]
 
